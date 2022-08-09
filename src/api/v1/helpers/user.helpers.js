@@ -1,6 +1,7 @@
 const userModel = require('../models/user.model');
 const { randomBytes } = require('node:crypto');
 const { encryption, generateUserToken, checkEncryption } = require('../middlewares/authToken');
+const { sendMail } = require('../services/mail.service');
 
 module.exports = {
     addUser: async (bodyData) => {
@@ -18,6 +19,7 @@ module.exports = {
                 reqId: reqId
             }
             const saveData = await userModel(formattedData);
+            await sendMail(email,otp)
             return await saveData.save() ? reqId : false;
         } catch (error) {
             return false
