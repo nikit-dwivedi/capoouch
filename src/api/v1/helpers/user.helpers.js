@@ -7,7 +7,7 @@ module.exports = {
     addUser: async (bodyData) => {
         try {
             const userId = randomBytes(4).toString('hex')
-            const otp = Math.floor(Math.random() * (999999 - 100000) + 100000)
+            const otp = Math.floor(Math.random() * (9999 - 1000) + 1000)
             const reqId = randomBytes(4).toString('hex')
             const encryptedPassword = await encryption(bodyData.password)
             const formattedData = {
