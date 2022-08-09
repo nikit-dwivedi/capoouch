@@ -19,7 +19,7 @@ module.exports = {
                 reqId: reqId
             }
             const saveData = await userModel(formattedData);
-            await sendMail(email,otp)
+            await sendMail(bodyData.email,otp)
             return await saveData.save() ? reqId : false;
         } catch (error) {
             return false
