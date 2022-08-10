@@ -2,6 +2,7 @@ const userModel = require('../models/user.model');
 const { randomBytes } = require('node:crypto');
 const { encryption, generateUserToken, checkEncryption, generateVerifiedyUserToken } = require('../middlewares/authToken');
 const { sendMail } = require('../services/mail.service');
+const { getPetInfo } = require('./pet.helper');
 
 module.exports = {
     addUser: async (bodyData) => {
@@ -66,12 +67,13 @@ module.exports = {
                 userData.isLogin = true
                 await userData.save()
                 const token = generateVerifiedyUserToken(userData);
-                return { token: token, isVerified: true }
+                const petInfo = await getPetInfo(userData.userId);
+                return petInfo ? { token: token, isVerified: true, petAdded: true } : { token: token, isVerified: true, petAdded: false }
             }
             const token = generateUserToken(userData);
             userData.isLogin = true
             await userData.save()
-            return { token: token, isVerified: false }
+            return { token: token, isVerified: false, petAdded: false }
         }
         catch (error) {
             return false

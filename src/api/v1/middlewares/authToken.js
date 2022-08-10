@@ -35,7 +35,7 @@ const generateUserToken = (user) => {
 
 const generateVerifiedyUserToken = (user) => {
   const data = {
-    UserId: user.UserId,
+    userId: user.userId,
     username: user.username,
     role: 1,
   };

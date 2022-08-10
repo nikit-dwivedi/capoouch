@@ -1,5 +1,5 @@
 const { validationResult } = require("express-validator")
-const { unknownError, badRequest, success } = require("../helpers/response_helper");
+const { unknownError, badRequest, success, created } = require("../helpers/response_helper");
 const { addUser, verifyEmail, checkLogin, checkByEmail, checkByUsername } = require("../helpers/user.helpers");
 
 module.exports = {
@@ -20,7 +20,7 @@ module.exports = {
                 return badRequest(res, "username already exists")
             }
             const formSubmission = await addUser(req.body);
-            return formSubmission ? success(res, "otp send", { reqId: formSubmission }) : badRequest(res, "please provide proper fields")
+            return formSubmission ? created(res, "otp send", { reqId: formSubmission }) : badRequest(res, "please provide proper fields")
         } catch (error) {
             console.log(error);
             return unknownError(res, "unknow error")
