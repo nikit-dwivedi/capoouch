@@ -19,7 +19,8 @@ module.exports = {
                 reqId: reqId
             }
             const saveData = await userModel(formattedData);
-            await sendMail(bodyData.email,otp)
+            await sendMail(bodyData.email, otp)
+            
             return await saveData.save() ? reqId : false;
         } catch (error) {
             return false
@@ -50,6 +51,22 @@ module.exports = {
             return passwordCheck ? token : false;
         }
         catch (error) {
+            return false
+        }
+    },
+    checkByEmail: async (uniqueKey) => {
+        try {
+            const userData = await userModel.findOne({ [uniqueKey]:uniqueKey })
+            return userData ? userData : false;
+        } catch (error) {
+            return false
+        }
+    },
+    checkByEmail: async (email) => {
+        try {
+            const userData = await userModel.findOne({ email })
+            return userData ? userData : false;
+        } catch (error) {
             return false
         }
     }
