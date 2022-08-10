@@ -3,18 +3,18 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const fs = require("fs");
 //--------------------------------------------------helpers-------------------------------------------------//
-const { forbidden, unauthorized } = require('../helpers/response.helper');
+const { forbidden, unauthorized } = require('../helpers/response_helper');
 
 
 
 //-------------------------------------------------privateKey----------------------------------------------//
 const adminPrivateKEY = fs.readFileSync("./key/admin.private.pem", "utf8");
 const userPrivateKEY = fs.readFileSync("./key/user.private.pem", "utf8");
-const MerchantPrivateKEY = fs.readFileSync("./key/merchant.private.pem", "utf8");
+const verifiedyUserPrivateKEY = fs.readFileSync("./key/verifiedyUser.private.pem", "utf8");
 
 //--------------------------------------------------publicKey----------------------------------------------//
 const adminPublicKEY = fs.readFileSync("./key/admin.public.pem", "utf8");
-const MerchantPublicKEY = fs.readFileSync("./key/merchant.public.pem", "utf8");
+const verifiedyUserPublicKEY = fs.readFileSync("./key/verifiedyUser.public.pem", "utf8");
 const userPublicKEY = fs.readFileSync("./key/user.public.pem", "utf8");
 
 //--------------------------------------------------options-------------------------------------------------//
@@ -27,20 +27,19 @@ const verifyOption = { expiresIn: "24h", algorithm: ["PS256"] };
 const generateUserToken = (user) => {
   const data = {
     userId: user.userId,
-    email: user.email,
+    username: user.username,
     role: 0,
   };
   return jwt.sign(data, userPrivateKEY, signOption);
 };
 
-const generateMerchantToken = (user) => {
+const generateVerifiedyUserToken = (user) => {
   const data = {
-    merchantId: user.merchantId,
-    merchantType: user.merchantType,
-    email: user.email,
+    UserId: user.UserId,
+    username: user.username,
     role: 1,
   };
-  return jwt.sign(data, MerchantPrivateKEY, signOption);
+  return jwt.sign(data, verifiedyUserPrivateKEY, signOption);
 };
 const generateAdminToken = (user) => {
   const data = {
@@ -78,7 +77,7 @@ function authenticateUser(req, res, next) {
         jwt.verify(token, adminPublicKEY, verifyOption);
         next();
       } else if (decode.userRole == 1) {
-        jwt.verify(token, MerchantPublicKEY, verifyOption);
+        jwt.verify(token, verifiedyUserPublicKEY, verifyOption);
         next();
       } else {
         jwt.verify(token, userPublicKEY, verifyOption);
@@ -92,7 +91,7 @@ function authenticateUser(req, res, next) {
   }
 }
 
-function authenticateMerchant(req, res, next) {
+function authenticateVerifiedyUser(req, res, next) {
   let authHeader = req.headers.authorization;
   if (authHeader) {
     try {
@@ -103,7 +102,7 @@ function authenticateMerchant(req, res, next) {
         jwt.verify(token, adminPublicKEY, verifyOption);
         next();
       } else {
-        jwt.verify(token, MerchantPublicKEY, verifyOption);
+        jwt.verify(token, verifiedyUserPublicKEY, verifyOption);
         next();
       }
     } catch (error) {
@@ -138,8 +137,8 @@ async function checkEncryption(data,encryptData ) {
 }
 
 module.exports = {
-  generateMerchantToken,
-  authenticateMerchant,
+  generateVerifiedyUserToken,
+  authenticateVerifiedyUser,
   generateUserToken,
   authenticateUser,
   generateAdminToken,
