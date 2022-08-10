@@ -14,6 +14,8 @@ const version1Index = require("./src/api/v1/index");
 app.use(morgan('dev'));
 // use cors
 app.use(cors());
+//image path
+app.use('/static', express.static('static'))
 //body parsing
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());

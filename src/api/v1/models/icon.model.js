@@ -5,7 +5,10 @@ const iconSchema = new Schema({
     id: {
         type: Number
     },
-    url: {
+    path: {
+        type: String,
+    },
+    name: {
         type: String
     },
 })

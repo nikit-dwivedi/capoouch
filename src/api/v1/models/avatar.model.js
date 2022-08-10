@@ -5,9 +5,12 @@ const avatarSchema = new Schema({
     id: {
         type: Number
     },
-    url: {
+    path: {
+        type: String,
+    },
+    name: {
         type: String
-    }
+    },
 });
 
 const avatarModel = mongoose.model('avatar', avatarSchema);

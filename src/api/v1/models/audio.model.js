@@ -16,9 +16,8 @@ const audioSchema = new Schema({
         required: true,
     },
     audio: {
-        type: String,
-        unique: true,
-        required: true
+        type: Object,
+        required: true,
     },
     isActive: {
         type: Boolean,

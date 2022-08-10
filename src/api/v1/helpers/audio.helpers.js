@@ -1,12 +1,14 @@
 const audioModel = require('../models/audio.model');
+const { getIconById } = require('./image.helper');
 
 module.exports = {
     addAudio: async (userId, bodyData) => {
         try {
+            const imageData = await getIconById(bodyData.iconId);
             const formattedData = {
                 userId: userId,
                 title: bodyData.Id,
-                icon: bodyData.icon,
+                icon: imageData,
                 audio: bodyData.audio
             }
             const saveData = audioModel(formattedData);
