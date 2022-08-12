@@ -4,7 +4,6 @@ const Schema = mongoose.Schema
 const audioSchema = new Schema({
     userId: {
         type: String,
-        unique: true,
         required: true
     },
     title: {
@@ -12,16 +11,16 @@ const audioSchema = new Schema({
         required: true
     },
     icon: {
-        type: String,
+        type: Object,
         required: true,
     },
     audio: {
-        type: Object,
+        type: String,
         required: true,
     },
     isActive: {
         type: Boolean,
-        deafult: true
+        default: true
     }
 }, { timestamps: true })
 

@@ -2,16 +2,17 @@ const audioModel = require('../models/audio.model');
 const { getIconById } = require('./image.helper');
 
 module.exports = {
-    addAudio: async (userId, bodyData) => {
+    addAudio: async (userId, bodyData, audioUrl) => {
         try {
-            const imageData = await getIconById(bodyData.iconId);
+            const iconData = await getIconById(bodyData.iconId);
+            console.log(iconData);
             const formattedData = {
                 userId: userId,
-                title: bodyData.Id,
-                icon: imageData,
-                audio: bodyData.audio
+                title: bodyData.title,
+                icon: iconData,
+                audio: audioUrl
             }
-            const saveData = audioModel(formattedData);
+            const saveData = await audioModel(formattedData);
             return saveData.save() ? true : false;
         } catch (error) {
             return false
@@ -19,7 +20,8 @@ module.exports = {
     },
     getAllAudio: async (userId) => {
         try {
-            const audioData = audioModel.find({ userId: userId, isActive: true }).select("-__v");
+            const audioData = await audioModel.find({ userId: userId, isActive: true }).select("-isActive -__v");
+            console.log(userId);
             return audioData[0] ? audioData : false;
         } catch (error) {
             return false
@@ -27,7 +29,7 @@ module.exports = {
     },
     removeAudio: async (audioId) => {
         try {
-            const changeData = audioModel.findByIdAndUpdate(audioId, { isActive: false });
+            const changeData = await audioModel.findByIdAndUpdate(audioId, { isActive: false });
             return changeData ? true : false;
         } catch (error) {
             return false

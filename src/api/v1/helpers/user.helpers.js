@@ -60,6 +60,7 @@ module.exports = {
                 return false;
             }
             const passwordCheck = await checkEncryption(password, userData.password);
+            console.log(passwordCheck);
             if (!passwordCheck) {
                 return false;
             }
@@ -71,11 +72,13 @@ module.exports = {
                 return petInfo ? { token: token, isVerified: true, petAdded: true } : { token: token, isVerified: true, petAdded: false }
             }
             const token = generateUserToken(userData);
+            const reqId = await genrateOtp(userData.email)
             userData.isLogin = true
             await userData.save()
-            return { token: token, isVerified: false, petAdded: false }
+            return { token: token, isVerified: false, petAdded: false, reqId: reqId };
         }
         catch (error) {
+            console.log(error);
             return false
         }
     },
@@ -98,4 +101,14 @@ module.exports = {
         }
     },
 
+}
+const genrateOtp = async (email) => {
+    const otp = Math.floor(Math.random() * (9999 - 1000) + 1000)
+    const reqId = randomBytes(4).toString('hex')
+    const updatedData = await userModel.findOneAndUpdate({ email }, { otp, reqId })
+    if (!updatedData) {
+        return false
+    }
+    await sendMail(email, otp)
+    return reqId
 }

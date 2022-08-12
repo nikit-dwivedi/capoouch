@@ -12,7 +12,6 @@ module.exports = {
             const emailCheck = await checkByEmail(req.body.email);
             const usernameCheck = await checkByUsername(req.body.username);
             if (emailCheck && usernameCheck) {
-                
                 return badRequest(res, "email and username already exists")
             } else if (emailCheck) {
                 return badRequest(res, "email already exists")
