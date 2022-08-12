@@ -85,7 +85,6 @@ module.exports = {
     checkByEmail: async (email) => {
         try {
             const userData = await userModel.findOne({ email })
-            console.log(userData);
             return userData ? userData : false;
         } catch (error) {
             return true
@@ -94,7 +93,6 @@ module.exports = {
     checkByUsername: async (username) => {
         try {
             const userData = await userModel.findOne({ username })
-            console.log(userData);
             return userData ? userData : false;
         } catch (error) {
             return false

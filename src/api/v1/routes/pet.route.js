@@ -3,9 +3,10 @@ const router = express.Router();
 
 const { addPet, editPet, petInfo } = require('../controllers/pet.controller');
 const { authenticateVerifiedyUser } = require('../middlewares/authToken');
+const uploads = require('../middlewares/upload');
 
-router.post('/register', authenticateVerifiedyUser, addPet);
-router.post('/edit', authenticateVerifiedyUser, editPet);
+router.post('/register', authenticateVerifiedyUser, uploads.single('image'), addPet);
+router.post('/edit', authenticateVerifiedyUser, uploads.single('image'), editPet);
 router.get('/', authenticateVerifiedyUser, petInfo);
 
 module.exports = router;

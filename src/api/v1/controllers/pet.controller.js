@@ -1,5 +1,5 @@
 const { validationResult } = require("express-validator");
-const { getPetInfo, addPet, editPet } = require("../helpers/pet.helper");
+const { getPetInfo, addPet, editPet, petImageUpload } = require("../helpers/pet.helper");
 const { badRequest, success, created, unknownError } = require("../helpers/response_helper");
 const { parseJwt } = require("../middlewares/authToken");
 
@@ -15,7 +15,8 @@ module.exports = {
             if (petCheck) {
                 return badRequest(res, "cant add multiple pet")
             }
-            const submitPet = await addPet(tokenData.userId, req.body);
+            const image = await petImageUpload(req);
+            const submitPet = await addPet(tokenData.userId, req.body, image);
             return submitPet ? created(res, "pet added successfully") : badRequest(res, "please provide proper feilds")
         } catch (error) {
             console.log(error);
@@ -29,7 +30,8 @@ module.exports = {
                 return badRequest(res, "please provide proper feilds")
             }
             const tokenData = parseJwt(req.headers.authorization);
-            const submitPet = await editPet(tokenData.userId, req.body);
+            const image = await petImageUpload(req);
+            const submitPet = await editPet(tokenData.userId, req.body, image);
             return submitPet ? success(res, "pet updated successfully") : badRequest(res, "please provide proper feilds")
         } catch (error) {
             return unknownError(res, "unknown error")

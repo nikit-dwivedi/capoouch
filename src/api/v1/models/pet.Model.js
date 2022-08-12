@@ -29,7 +29,7 @@ const petSchema = new Schema({
     },
     image: {
         type: String,
-        required: true,
+        default:"",
     }
 }, { timestamps: true })
 

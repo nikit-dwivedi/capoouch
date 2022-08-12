@@ -21,7 +21,6 @@ module.exports = {
             const formSubmission = await addUser(req.body);
             return formSubmission ? created(res, "otp send", { reqId: formSubmission }) : badRequest(res, "please provide proper fields")
         } catch (error) {
-            console.log(error);
             return unknownError(res, "unknow error")
         }
     },
