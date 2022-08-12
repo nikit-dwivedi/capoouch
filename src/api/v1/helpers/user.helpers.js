@@ -45,7 +45,7 @@ module.exports = {
             if (userData.otp != otp) {
                 return false
             }
-            const token = generateUserToken(userData);
+            const token = generateVerifiedyUserToken(userData);
             userData.isVerified = true;
             userData.save()
             return token
