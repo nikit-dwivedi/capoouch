@@ -5,10 +5,7 @@ const avatarSchema = new Schema({
     id: {
         type: Number
     },
-    path: {
-        type: String,
-    },
-    name: {
+    url: {
         type: String
     },
 });

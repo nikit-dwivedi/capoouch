@@ -2,15 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const iconSchema = new Schema({
-    id: {
-        type: Number
-    },
-    path: {
-        type: String,
-    },
-    name: {
-        type: String
-    },
+    id: { type: Number },
+    url: { type: String }
 })
 
 const iconModel = mongoose.model('icon', iconSchema);

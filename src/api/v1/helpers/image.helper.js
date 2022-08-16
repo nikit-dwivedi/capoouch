@@ -5,8 +5,7 @@ module.exports = {
     addIcon: async (image) => {
         try {
             const formattedData = {
-                path: "icon",
-                name: image
+                url: `static/icon/${image}.png`,
             }
             const saveData = await iconModel(formattedData);
             return await saveData.save() ? true : false
@@ -17,8 +16,7 @@ module.exports = {
     addAvatar: async (image) => {
         try {
             const formattedData = {
-                path: "avatar",
-                name: image
+                url: `static/avatar/${image}.png`,
             }
             const saveData = await avatarModel(formattedData);
             return await saveData.save() ? true : false
