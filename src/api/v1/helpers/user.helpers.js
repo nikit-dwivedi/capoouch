@@ -29,7 +29,8 @@ module.exports = {
     genrateOtp: async (email) => {
         const otp = Math.floor(Math.random() * (9999 - 1000) + 1000)
         const reqId = randomBytes(4).toString('hex')
-        const updatedData = await userModel.findOneAndUpdate({ email }, { otp, reqId })
+        const updatedData = await userModel.findOneAndUpdate({ email }, { otp, reqId }, { new: true })
+        console.log(updatedData);
         if (!updatedData) {
             return false
         }
@@ -78,7 +79,6 @@ module.exports = {
             return { token: token, isVerified: false, petAdded: false, reqId: reqId };
         }
         catch (error) {
-            console.log(error);
             return false
         }
     },
@@ -98,15 +98,49 @@ module.exports = {
             return false
         }
     },
+    verifyOtp: async (reqId, otp) => {
+        try {
+            const userData = await userModel.findOne({ reqId });
+            if (!userData) {
+                return false
+            }
+            if (userData.otp == otp) {
+                return true
+            }
+            return false
+        } catch (error) {
+            return false
+        }
+    },
+    changePassword: async (email, oldPassword, newPassword) => {
+        try {
+            const userData = await userModel.findOne({ email });
+            if (oldPassword) {
+                const passwordCheck = await checkEncryption(oldPassword, userData.password);
+                if (!passwordCheck) {
+                    return false
+                }
+            }
+            const encryptedPassword = await encryption(newPassword);
+            userData.password = encryptedPassword;
+            return await userData.save() ? true : false
+        } catch (error) {
+            return false
+        }
+    }
 
 }
 const genrateOtp = async (email) => {
-    const otp = Math.floor(Math.random() * (9999 - 1000) + 1000)
-    const reqId = randomBytes(4).toString('hex')
-    const updatedData = await userModel.findOneAndUpdate({ email }, { otp, reqId })
-    if (!updatedData) {
+    try {
+        const otp = Math.floor(Math.random() * (9999 - 1000) + 1000)
+        const reqId = randomBytes(4).toString('hex')
+        const updatedData = await userModel.findOneAndUpdate({ email }, { otp, reqId })
+        if (!updatedData) {
+            return false
+        }
+        await sendMail(email, otp)
+        return reqId
+    } catch (error) {
         return false
     }
-    await sendMail(email, otp)
-    return reqId
 }

@@ -1,6 +1,7 @@
 const { validationResult } = require("express-validator")
 const { unknownError, badRequest, success, created } = require("../helpers/response_helper");
-const { addUser, verifyEmail, checkLogin, checkByEmail, checkByUsername } = require("../helpers/user.helpers");
+const { addUser, verifyEmail, checkLogin, checkByEmail, checkByUsername, verifyOtp, changePassword, genrateOtp } = require("../helpers/user.helpers");
+const { parseJwt } = require("../middlewares/authToken");
 
 module.exports = {
     register: async (req, res) => {
@@ -48,6 +49,55 @@ module.exports = {
             return responseData ? success(res, "login successful", responseData) : badRequest(res, "invalid credentials")
         } catch (error) {
             return unknownError(res, "unknown error");
+        }
+    },
+    sendOtp: async (req, res) => {
+        try {
+            const error = validationResult(req);
+            if (!error.isEmpty()) {
+                return badRequest(res, "please provide proper fields")
+            }
+            const { email } = req.body
+            const userCheck = await checkByEmail(email);
+            if (!userCheck) {
+                return badRequest("email doesn't exists")
+            }
+            const reqId = await genrateOtp(email);
+            return reqId ? success(res, "otp send successfully", reqId) : badRequest(res, "please provide proper fields")
+        } catch (error) {
+            console.log(error);
+            return unknownError(res, "unknow error")
+        }
+    },
+    otpVerification: async (req, res) => {
+        try {
+            const error = validationResult(req);
+            if (!error.isEmpty()) {
+                return badRequest(res, "please provide proper fields")
+            }
+            const { reqId, otp } = req.body
+            const verification = await verifyOtp(reqId, otp)
+            return verification ? success(res, "otp verified") : badRequest(res, "invalid otp")
+        } catch (error) {
+            unknownError(res, "unknown error")
+        }
+    },
+    changeCurrentPassword: async (req, res) => {
+        try {
+            const error = validationResult(req);
+            if (!error.isEmpty()) {
+                return badRequest(res, "please provide proper fields")
+            }
+            if (req.headers.authorization) {
+                const token = parseJwt(req.headers.authorization)
+                const {email} = await checkByUsername(token.username)
+                const updatePassword = await changePassword(email, req.body.oldPassword, req.body.newPassword);
+                return updatePassword ? success(res, "password changed successfully") : badRequest(res, "please provide proper fields")
+            }
+            const updatePassword = await changePassword(req.body.email, null, req.body.newPassword);
+            return updatePassword ? success(res, "password changed successfully") : badRequest(res, "please provide proper fields")
+        } catch (error) {
+            return unknownError(res, "unknown error")
         }
     }
 }
