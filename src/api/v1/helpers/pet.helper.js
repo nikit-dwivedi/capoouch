@@ -20,7 +20,7 @@ module.exports = {
                 sex: bodyData.sex,
                 weight: bodyData.weight,
                 image: image,
-                avatar: "static/avatar/avatar3",
+                avatar: "static/avatar/avatar3.svg",
                 isAvatar: isAvatar
             }
             const saveData = petModel(formattedData);

@@ -16,7 +16,7 @@ module.exports = {
     addAvatar: async (image) => {
         try {
             const formattedData = {
-                url: `static/avatar/${image}.png`,
+                url: `static/avatar/${image}.svg`,
             }
             const saveData = await avatarModel(formattedData);
             return await saveData.save() ? true : false
