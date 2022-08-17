@@ -1,10 +1,17 @@
+const { validationResult } = require('express-validator');
+const avatarModel = require('../models/avatar.model');
 const petModel = require('../models/pet.Model');
 const { uploadImage } = require('../services/s3.service');
+const { unknownError, badRequest } = require('./response_helper');
 
 
 module.exports = {
     addPet: async (userId, bodyData, image) => {
         try {
+            let isAvatar = false;
+            if (image == "") {
+                isAvatar = true
+            }
             const formattedData = {
                 userId: userId,
                 name: bodyData.name,
@@ -12,7 +19,9 @@ module.exports = {
                 breed: bodyData.breed,
                 sex: bodyData.sex,
                 weight: bodyData.weight,
-                image: image
+                image: image,
+                avatar: "static/avatar/avatar3",
+                isAvatar: isAvatar
             }
             const saveData = petModel(formattedData);
             return saveData.save() ? true : false;
@@ -55,6 +64,23 @@ module.exports = {
         } catch (error) {
             const image = ""
             return image
+        }
+    },
+    changeHomeImage: async (userId, bodyData, file) => {
+        try {
+            const petData = await petModel.findOne({ userId })
+            if (!file) {
+                const avatarData = await avatarModel.findById(bodyData.avatarId)
+                petData.avatar = avatarData.url
+                petData.isAvatar = true
+                return await petData.save() ? true : false
+            }
+            const { Location } = await uploadImage(file);
+            petData.image = Location
+            petData.isAvatar = false;
+            return await petData.save() ? true : false
+        } catch (error) {
+            return false
         }
     }
 }

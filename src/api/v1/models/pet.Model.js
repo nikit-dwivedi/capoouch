@@ -29,7 +29,15 @@ const petSchema = new Schema({
     },
     image: {
         type: String,
-        default:"",
+        default: "",
+    },
+    avatar: {
+        type: String,
+        default: "static/avatar/avatar3"
+    },
+    isAvatar: {
+        type: Boolean,
+        default: true
     }
 }, { timestamps: true })
 
