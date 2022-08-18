@@ -42,7 +42,7 @@ module.exports = {
     },
     getIconById: async (iconId) => {
         try {
-            const imageData = await iconModel.findById(iconId).select('-_id name path')
+            const imageData = await iconModel.findById(iconId).select('-_id -__v')
             return imageData ? imageData : false
         } catch (error) {
             return false
