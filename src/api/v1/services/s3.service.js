@@ -17,6 +17,7 @@ const uploadAudio = async (fileData) => {
         Body: blob
     };
     const data = await s3.upload(params).promise();
+    fs.unlinkSync(fileData.path)
     return data
 };
 
@@ -28,6 +29,7 @@ const uploadImage = async (fileData) => {
         Body: blob
     };
     const data = await s3.upload(params).promise();
+    fs.unlinkSync(fileData.path)
     return data
 };
 module.exports = { uploadAudio, uploadImage };

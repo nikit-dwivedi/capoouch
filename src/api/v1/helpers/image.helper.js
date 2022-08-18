@@ -50,7 +50,7 @@ module.exports = {
     },
     getAvatarById: async (avatarId) => {
         try {
-            const imageData = await iconModel.findById(avatarId).select('-_id name path')
+            const imageData = await iconModel.findById(avatarId).select('-_id url')
             return imageData ? imageData : false
         } catch (error) {
             return false
