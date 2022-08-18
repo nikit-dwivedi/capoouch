@@ -5,7 +5,6 @@ module.exports = {
     addAudio: async (userId, bodyData, audioUrl) => {
         try {
             const {url} = await getIconById(bodyData.iconId);
-            console.log(bodyData);
             const formattedData = {
                 userId: userId,
                 title: bodyData.title,
