@@ -105,7 +105,8 @@ module.exports = {
                 return false
             }
             if (userData.otp == otp) {
-                return true
+                const token = generateUserToken(userData);
+                return token
             }
             return false
         } catch (error) {

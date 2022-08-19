@@ -77,7 +77,8 @@ module.exports = {
             }
             const { reqId, otp } = req.body
             const verification = await verifyOtp(reqId, otp)
-            return verification ? success(res, "otp verified") : badRequest(res, "invalid otp")
+            // const token
+            return verification ? success(res, "otp verified",verification) : badRequest(res, "invalid otp")
         } catch (error) {
             unknownError(res, "unknown error")
         }
@@ -88,9 +89,9 @@ module.exports = {
             if (!error.isEmpty()) {
                 return badRequest(res, "please provide proper fields")
             }
-            if (req.headers.authorization) {
-                const token = parseJwt(req.headers.authorization)
-                const {email} = await checkByUsername(token.username)
+            const token = parseJwt(req.headers.authorization)
+            const {email} = await checkByUsername(token.username)
+            if (token.isLogin) {
                 const updatePassword = await changePassword(email, req.body.oldPassword, req.body.newPassword);
                 return updatePassword ? success(res, "password changed successfully") : badRequest(res, "please provide proper fields")
             }
