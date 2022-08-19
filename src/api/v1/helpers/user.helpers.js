@@ -48,6 +48,7 @@ module.exports = {
     verifyEmail: async (reqId, otp) => {
         try {
             const userData = await userModel.findOne({ reqId });
+            
             if (!userData) {
                 return false
             }
@@ -108,6 +109,7 @@ module.exports = {
     },
     verifyOtp: async (reqId, otp) => {
         try {
+            const newReqId = randomBytes(4).toString('hex')
             const userData = await userModel.findOne({ reqId });
             if (!userData) {
                 return false
@@ -115,8 +117,8 @@ module.exports = {
             if (userData.otp == otp) {
                 const token = generateUserToken(userData);
                 userData.noOfOtp = 0
-                userData.reqId=""
                 userData.otp=0
+                userData.reqId = newReqId
                 await userData.save()
                 return token
             }
