@@ -23,7 +23,7 @@ module.exports = {
                 avatar: "static/avatar/avatar3.svg",
                 isAvatar: isAvatar
             }
-            const saveData = petModel(formattedData);
+            const saveData = await petModel(formattedData);
             return saveData.save() ? true : false;
         } catch (error) {
             return false
@@ -39,15 +39,16 @@ module.exports = {
                 weight: bodyData.weight,
                 image: image
             }
-            const saveData = petModel.findOneAndUpdate({ userId }, formattedData);
+            const saveData = await petModel.findOneAndUpdate({ userId }, formattedData,{new:true});
             return saveData ? true : false;
         } catch (error) {
+            console.log(error);
             return false
         }
     },
     getPetInfo: async (userId) => {
         try {
-            const petData = petModel.findOne({ userId }).select('-_id -__v')
+            const petData = await petModel.findOne({ userId }).select('-_id -__v')
             return petData ? petData : false
         } catch (error) {
             return false
