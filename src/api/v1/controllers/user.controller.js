@@ -95,7 +95,7 @@ module.exports = {
                 const updatePassword = await changePassword(email, req.body.oldPassword, req.body.newPassword);
                 return updatePassword ? success(res, "password changed successfully") : badRequest(res, "please provide proper fields")
             }
-            const updatePassword = await changePassword(req.body.email, null, req.body.newPassword);
+            const updatePassword = await changePassword(email, null, req.body.newPassword);
             return updatePassword ? success(res, "password changed successfully") : badRequest(res, "please provide proper fields")
         } catch (error) {
             return unknownError(res, "unknown error")
