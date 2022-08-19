@@ -27,11 +27,19 @@ module.exports = {
         }
     },
     genrateOtp: async (email) => {
+        const date = new Date
         const otp = Math.floor(Math.random() * (9999 - 1000) + 1000)
         const reqId = randomBytes(4).toString('hex')
-        const updatedData = await userModel.findOneAndUpdate({ email }, { otp, reqId }, { new: true })
-        console.log(updatedData);
-        if (!updatedData) {
+        const updatedData = await userModel.findOne({ email })
+        if (updatedData.noOfOtp >= 3 && updatedData.date == date.getDate()) {
+            return 1
+        }
+        updatedData.otp = otp;
+        updatedData.reqId = reqId;
+        updatedData.noOfOtp += 1
+        updatedData.date = date.getDate()
+        const saveData = await updatedData.save()
+        if (!saveData) {
             return false
         }
         await sendMail(email, otp)
@@ -106,6 +114,10 @@ module.exports = {
             }
             if (userData.otp == otp) {
                 const token = generateUserToken(userData);
+                userData.noOfOtp = 0
+                userData.reqId=""
+                userData.otp=0
+                await userData.save()
                 return token
             }
             return false

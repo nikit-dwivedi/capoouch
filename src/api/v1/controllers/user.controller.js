@@ -63,6 +63,9 @@ module.exports = {
                 return badRequest(res,"email doesn't exists")
             }
             const reqId = await genrateOtp(email);
+            if (reqId===1) {
+                return badRequest(res,'otp limit reached');
+            }
             return reqId ? success(res, "otp send successfully", reqId) : badRequest(res, "please provide proper fields")
         } catch (error) {
             console.log(error);

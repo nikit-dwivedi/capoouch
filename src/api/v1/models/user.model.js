@@ -39,6 +39,13 @@ const userSchema = new Schema({
     isLogin: {
         type: Boolean,
         default: true
+    },
+    noOfOtp: {
+        type: Number,
+        default: 0
+    },
+    date:{
+        type:Number,
     }
 }, { timestamps: true })
 
