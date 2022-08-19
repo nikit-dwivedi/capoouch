@@ -60,7 +60,7 @@ module.exports = {
             const { email } = req.body
             const userCheck = await checkByEmail(email);
             if (!userCheck) {
-                return badRequest("email doesn't exists")
+                return badRequest(res,"email doesn't exists")
             }
             const reqId = await genrateOtp(email);
             return reqId ? success(res, "otp send successfully", reqId) : badRequest(res, "please provide proper fields")
