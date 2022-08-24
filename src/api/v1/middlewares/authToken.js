@@ -18,8 +18,8 @@ const verifiedyUserPublicKEY = fs.readFileSync("./key/verifiedyUser.public.pem",
 const userPublicKEY = fs.readFileSync("./key/user.public.pem", "utf8");
 
 //--------------------------------------------------options-------------------------------------------------//
-const signOption = { expiresIn: "24h", algorithm: "PS256" };
-const verifyOption = { expiresIn: "24h", algorithm: ["PS256"] };
+const signOption = { expiresIn: "30 days", algorithm: "PS256" };
+const verifyOption = { expiresIn: "30 days", algorithm: ["PS256"] };
 
 
 
@@ -60,7 +60,7 @@ function authenticateAdmin(req, res, next) {
       jwt.verify(token, adminPublicKEY, verifyOption);
       next();
     } catch (err) {
-      unauthorized(res,"invalid token");
+      unauthorized(res, "invalid token");
     }
   } else {
     forbidden(res, "token not found");
@@ -96,7 +96,7 @@ function authenticateVerifiedyUser(req, res, next) {
   if (authHeader) {
     try {
       const decode = parseJwt(authHeader)
-      
+
       const token = authHeader.split(" ")[1];
       if (decode.userRole == 2) {
         jwt.verify(token, adminPublicKEY, verifyOption);
@@ -131,7 +131,7 @@ async function encryption(data) {
   return hash;
 }
 
-async function checkEncryption(data,encryptData ) {
+async function checkEncryption(data, encryptData) {
   const check = await bcrypt.compare(data, encryptData);
   return check;
 }
