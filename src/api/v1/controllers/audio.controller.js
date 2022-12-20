@@ -1,8 +1,8 @@
 const { validationResult } = require("express-validator");
-const { addAudio, getAllAudio, removeAudio } = require("../helpers/audio.helpers");
+const { addAudio, getAllAudio, removeAudio, getDefaultAudioList, addDefaultAudio } = require("../helpers/audio.helpers");
 const { badRequest, unknownError, created } = require('../helpers/response_helper');
 const { parseJwt } = require("../middlewares/authToken");
-const {uploadAudio} = require("../services/s3.service");
+const { uploadAudio } = require("../services/s3.service");
 
 module.exports = {
     addNewAudio: async (req, res) => {
@@ -44,6 +44,23 @@ module.exports = {
             return audioList ? created(res, "audio removed") : badRequest(res, "bad request");
         } catch (error) {
             return unknownError(res, "unknown error");
+        }
+    },
+    defaultAudioAdd: async (req, res) => {
+        try {
+            const { title } = req.body
+            const { status, message } = await addDefaultAudio(title);
+            return status ? created(res, message) : badRequest(res, message);
+        } catch (error) {
+            return unknownError(res, error.message);
+        }
+    },
+    getDefaultAudio: async (req, res) => {
+        try {
+            const { status, message, data } = await getDefaultAudioList(req.body.audioId);
+            return status ? created(res, message, data) : badRequest(res, message);
+        } catch (error) {
+            return unknownError(res, error.message);
         }
     }
 }
