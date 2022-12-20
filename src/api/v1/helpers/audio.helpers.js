@@ -51,7 +51,7 @@ module.exports = {
     },
     getDefaultAudioList: async () => {
         try {
-            const audioList = await defaultAudioModel.find().select("-_id -createdAt -updatedAt -__v");
+            const audioList = await defaultAudioModel.find().select("-_id -createdAt -updatedAt -isActive -__v");
             return audioList[0] ? { status: true, message: "default audio list", data: audioList } : { status: false, message: "no default audio", data: {} };
         } catch (error) {
             return { status: false, message: error.message, data: {} }
