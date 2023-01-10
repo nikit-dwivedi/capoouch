@@ -39,7 +39,7 @@ const mergeAudio = async (defaultAudioData, fileData) => {
         let Fname = fileData.filename.split(".")[0]
         let FPath = fileData.path.split(".")[0]
         console.log(fileData.filename.split(".")[0]);
-
+        ffmpeg.setFfprobePath('/snap/bin/ffmpeg/ffmpeg.ffprobe')
         ffmpeg(defaultAudioData.audio)
             .input(fileData.path)
             .on('end', async function () {
