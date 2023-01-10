@@ -35,6 +35,7 @@ const uploadImage = async (fileData) => {
 };
 
 const mergeAudio = async (defaultAudioData, fileData) => {
+    console.log(__dirname);
     return new Promise((resolve, reject) => {
         let Fname = fileData.filename.split(".")[0]
         let FPath = fileData.path.split(".")[0]
@@ -52,7 +53,6 @@ const mergeAudio = async (defaultAudioData, fileData) => {
                 resolve(newFileData)
             })
             .on('error', function (err) {
-                console.log(__dirname);
                 console.log('An error occurred: ' + err.message);
                 reject(false)
             })
