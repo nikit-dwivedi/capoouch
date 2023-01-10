@@ -56,7 +56,7 @@ const mergeAudio = async (defaultAudioData, fileData) => {
                 console.log('An error occurred: ' + err.message);
                 reject(false)
             })
-            .mergeToFile(`/home/nikit/capoouch/audio/output.mp3`, '/home/nikit/capoouch/audio')
+            .mergeToFile(`/home/nikit/capoouch/audio/output.mp3`)
     })
 };
 module.exports = { uploadAudio, uploadImage, mergeAudio };
