@@ -1,22 +1,36 @@
 const { validationResult } = require("express-validator");
-const { addAudio, getAllAudio, removeAudio, getDefaultAudioList, addDefaultAudio } = require("../helpers/audio.helpers");
+const { addAudio, getAllAudio, removeAudio, getDefaultAudioList, addDefaultAudio, getDefaultAudioByAudioId } = require("../helpers/audio.helpers");
 const { badRequest, unknownError, created } = require('../helpers/response_helper');
 const { parseJwt } = require("../middlewares/authToken");
-const { uploadAudio } = require("../services/s3.service");
+const { uploadAudio, mergeAudio } = require("../services/s3.service");
 
 module.exports = {
     addNewAudio: async (req, res) => {
         try {
+            let location = ""
             const error = validationResult(req);
             if (!error.isEmpty()) {
                 return badRequest(res, "please provide proper feilds");
             }
             const { userId } = parseJwt(req.headers.authorization);
-            const { Location } = await uploadAudio(req.file);
+            // if (req.body.defaultAudioId) {
+            const defaultAudioData = await getDefaultAudioByAudioId(req.body.defaultAudioId)
+            if (!defaultAudioData.status) {
+                return badRequest(res, defaultAudioData.message)
+            }
+            const mergeAudioResponse = await mergeAudio(defaultAudioData.data, req.file);
+            // if (mergeAudioResponse) {
+            //     return badRequest(res, "please provide proper felids")
+            // }
+            // } else {
+            // location = Location
+            // }
+            // let saveData = true
+            const { Location } = await uploadAudio(mergeAudioResponse);
             const saveData = await addAudio(userId, req.body, Location);
             return saveData ? created(res, "audio added") : badRequest(res, "please provide proper feilds");
         } catch (error) {
-            // console.log(error);
+            console.log(error);
             return unknownError(res, "unknown error");
         }
     },

@@ -13,7 +13,7 @@ module.exports = {
                 icon: url,
                 audio: audioUrl
             }
-            const saveData = await audioModel(formattedData);
+            const saveData = new audioModel(formattedData);
             return saveData.save() ? true : false;
         } catch (error) {
             return false
@@ -45,6 +45,14 @@ module.exports = {
             const saveData = new defaultAudioModel(data);
             await saveData.save()
             return saveData ? { status: true, message: "audio added", data: {} } : { status: false, message: "audio not added", data: {} };
+        } catch (error) {
+            return { status: false, message: error.message, data: {} }
+        }
+    },
+    getDefaultAudioByAudioId: async (audioId) => {
+        try {
+            const audioList = await defaultAudioModel.findOne({audioId}).select("-_id -createdAt -updatedAt -isActive -__v");
+            return audioList ? { status: true, message: "default audio data", data: audioList } : { status: false, message: "no default audio", data: {} };
         } catch (error) {
             return { status: false, message: error.message, data: {} }
         }

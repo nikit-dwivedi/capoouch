@@ -1,5 +1,6 @@
 const fs = require('fs');
 const AWS = require('aws-sdk');
+const ffmpeg = require('fluent-ffmpeg');
 
 const s3 = new AWS.S3({
     accessKeyId: 'AKIAX4PAJC2HA3OXCVNE',
@@ -32,4 +33,29 @@ const uploadImage = async (fileData) => {
     fs.unlinkSync(fileData.path)
     return data
 };
-module.exports = { uploadAudio, uploadImage };
+
+const mergeAudio = async (defaultAudioData, fileData) => {
+    return new Promise((resolve, reject) => {
+        let Fname = fileData.filename.split(".")[0]
+        let FPath = fileData.path.split(".")[0]
+        console.log(fileData.filename.split(".")[0]);
+
+        ffmpeg(defaultAudioData.audio)
+            .input(fileData.path)
+            .on('end', async function () {
+                console.log('Merging finished !');
+                fs.unlinkSync(fileData.path)
+                let newFileData = {
+                    filename: Fname + ".mp3",
+                    path: FPath + ".mp3"
+                }
+                resolve(newFileData)
+            })
+            .on('error', function (err) {
+                console.log('An error occurred: ' + err.message);
+                reject(false)
+            })
+            .mergeToFile(`audio/${fileData.filename.split(".")[0]}.mp3`, 'audio')
+    })
+};
+module.exports = { uploadAudio, uploadImage, mergeAudio };
