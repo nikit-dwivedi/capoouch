@@ -79,6 +79,7 @@ const uploadImage = async (fileData) => {
 // };
 const mergeAudio = async (defaultAudioData, fileData) => {
     try {
+        console.log(defaultAudioData, fileData);
         let Fname = fileData.filename.split(".")[0]
         let FPath = fileData.path.split(".")[0]
         ffmpeg.setFfprobePath('/snap/bin/ffmpeg/ffmpeg.ffprobe')
