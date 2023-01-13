@@ -50,6 +50,8 @@ const mergeAudio = async (defaultAudioData, fileData) => {
         console.log(`stdout: ${stdout}`);
     });
     return new Promise((resolve, reject) => {
+        console.log("default audio =>", defaultAudioData.audio);
+        console.log("recorded audio =>", fileData.path);
         let Fname = fileData.filename.split(".")[0]
         let FPath = fileData.path.split(".")[0]
         console.log(fileData.filename.split(".")[0]);
