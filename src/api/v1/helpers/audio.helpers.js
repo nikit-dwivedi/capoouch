@@ -51,7 +51,7 @@ module.exports = {
     },
     getDefaultAudioByAudioId: async (audioId) => {
         try {
-            const audioList = await defaultAudioModel.findOne({audioId}).select("-_id -createdAt -updatedAt -isActive -__v");
+            const audioList = await defaultAudioModel.findOne({ audioId }).select("-_id -createdAt -updatedAt -isActive -__v");
             return audioList ? { status: true, message: "default audio data", data: audioList } : { status: false, message: "no default audio", data: {} };
         } catch (error) {
             return { status: false, message: error.message, data: {} }
@@ -64,5 +64,8 @@ module.exports = {
         } catch (error) {
             return { status: false, message: error.message, data: {} }
         }
+    },
+    delay: () => {
+        return new Promise(resolve => setTimeout(resolve, 1000))
     }
 }
