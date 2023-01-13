@@ -38,7 +38,7 @@ const uploadImage = async (fileData) => {
 };
 
 const mergeAudio = async (defaultAudioData, fileData) => {
-    exec(`ls -la static/audio/`, (error, stdout, stderr) => {
+    exec(`ls -la audio/`, (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
             return;
