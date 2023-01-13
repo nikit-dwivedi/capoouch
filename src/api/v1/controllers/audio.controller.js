@@ -19,6 +19,7 @@ module.exports = {
                     return badRequest(res, defaultAudioData.message)
                 }
                 mergeAudioResponse = await mergeAudio(defaultAudioData.data, req.file);
+                console.log(mergeAudioResponse);
             }
             delay().then(async () => {
                 const { Location } = await uploadAudio(mergeAudioResponse);

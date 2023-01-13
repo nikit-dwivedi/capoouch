@@ -14,7 +14,6 @@ const s3 = new AWS.S3({
 
 
 const uploadAudio = async (fileData) => {
-    console.log(fileData);
     const blob = fs.readFileSync(fileData.path)
     const params = {
         Bucket: 'audio-bucket-dev-nikit', // pass your bucket name
@@ -82,7 +81,7 @@ const mergeAudio = async (defaultAudioData, fileData) => {
     try {
         let Fname = fileData.filename.split(".")[0]
         let FPath = fileData.path.split(".")[0]
-        ffmpeg.setFfprobePath('/snap/bin/ffmpeg/ffmpeg')
+        ffmpeg.setFfprobePath('/snap/bin/ffmpeg/ffmpeg.ffprobe')
         const proc = new ffmpeg({ source: fileData.path })
             .mergeAdd(defaultAudioData.audio)
             .mergeToFile(`${FPath}.mp3`, "audio/");
