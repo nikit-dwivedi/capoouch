@@ -93,6 +93,7 @@ const mergeAudio = async (defaultAudioData, fileData) => {
         }
         return newFileData
     } catch (error) {
+        console.log("====",error);
         return error
     }
 };
