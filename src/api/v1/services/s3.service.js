@@ -56,8 +56,8 @@ const mergeAudio = async (defaultAudioData, fileData) => {
         let FPath = fileData.path.split(".")[0]
         console.log(fileData.filename.split(".")[0]);
         ffmpeg.setFfprobePath('/snap/bin/ffmpeg/ffmpeg')
-        ffmpeg(defaultAudioData.audio+"asd")
-            .input(fileData.path)
+        ffmpeg("./"+defaultAudioData.audio)
+            .input("./",fileData.path)
             .on('end', async function () {
                 console.log('Merging finished !');
                 fs.unlinkSync(fileData.path)
