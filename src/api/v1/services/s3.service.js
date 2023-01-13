@@ -56,7 +56,7 @@ const mergeAudio = async (defaultAudioData, fileData) => {
         let FPath = fileData.path.split(".")[0]
         console.log(fileData.filename.split(".")[0]);
         ffmpeg.setFfprobePath('/snap/bin/ffmpeg/ffmpeg')
-        ffmpeg(defaultAudioData.audio)
+        ffmpeg(defaultAudioData.audio+"asd")
             .input(fileData.path)
             .on('end', async function () {
                 console.log('Merging finished !');
@@ -71,7 +71,7 @@ const mergeAudio = async (defaultAudioData, fileData) => {
                 console.log('An error occurred: ' + err.message);
                 reject(false)
             })
-            .mergeToFile(`/home/nikit/capoouch/audio/output.mp3`,"/home/nikit/capoouch/audio")
+            .mergeToFile(`audio/output.mp3`,"audio")
     })
 };
 module.exports = { uploadAudio, uploadImage, mergeAudio };
