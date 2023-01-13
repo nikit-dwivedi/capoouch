@@ -84,8 +84,8 @@ const mergeAudio = async (defaultAudioData, fileData) => {
         let FPath = fileData.path.split(".")[0]
         ffmpeg.setFfprobePath('/snap/bin/ffmpeg/ffmpeg.ffprobe')
         const proc = new ffmpeg({ source: fileData.path })
-            .mergeAdd(defaultAudioData.audio)
-            .mergeToFile(`${FPath}.mp3`, "audio/");
+        proc.mergeAdd(defaultAudioData.audio)
+        proc.mergeToFile(`${FPath}.mp3`, "audio/");
         let newFileData = {
             filename: Fname + ".mp3",
             path: FPath + ".mp3",
