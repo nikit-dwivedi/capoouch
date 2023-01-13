@@ -69,7 +69,7 @@ const mergeAudio = async (defaultAudioData, fileData) => {
                 console.log('An error occurred: ' + err.message);
                 reject(false)
             })
-            .mergeToFile(`/audio/output.mp3`)
+            .mergeToFile(`audio/output.mp3`)
     })
 };
 module.exports = { uploadAudio, uploadImage, mergeAudio };
