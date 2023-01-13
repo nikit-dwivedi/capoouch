@@ -15,6 +15,7 @@ const s3 = new AWS.S3({
 
 const uploadAudio = async (fileData) => {
     const blob = fs.readFileSync(fileData.path)
+    console.log(fileData);
     const params = {
         Bucket: 'audio-bucket-dev-nikit', // pass your bucket name
         Key: 'audio/' + fileData.filename, // file will be saved as testBucket/contacts.csv
@@ -22,7 +23,9 @@ const uploadAudio = async (fileData) => {
     };
     const data = await s3.upload(params).promise();
     fs.unlinkSync(fileData.path)
-    fs.unlinkSync(fileData.originPath)
+    if (fileData.originPath) {
+        fs.unlinkSync(fileData.originPath)
+    }
     return data
 };
 
