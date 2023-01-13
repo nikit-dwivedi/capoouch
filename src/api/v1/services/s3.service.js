@@ -1,6 +1,9 @@
 const fs = require('fs');
 const AWS = require('aws-sdk');
 const ffmpeg = require('fluent-ffmpeg');
+const { exec } = require("child_process");
+
+
 
 const s3 = new AWS.S3({
     accessKeyId: 'AKIAX4PAJC2HA3OXCVNE',
@@ -35,7 +38,17 @@ const uploadImage = async (fileData) => {
 };
 
 const mergeAudio = async (defaultAudioData, fileData) => {
-    console.log(__dirname);
+    exec("ls -la", (error, stdout, stderr) => {
+        if (error) {
+            console.log(`error: ${error.message}`);
+            return;
+        }
+        if (stderr) {
+            console.log(`stderr: ${stderr}`);
+            return;
+        }
+        console.log(`stdout: ${stdout}`);
+    });
     return new Promise((resolve, reject) => {
         let Fname = fileData.filename.split(".")[0]
         let FPath = fileData.path.split(".")[0]
